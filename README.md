@@ -46,7 +46,7 @@ If you installed Steam with a system pacakage manager (apt, yum, dnf, etc) and N
 variable in your shell profile after install. As far as to where this variable is located, it depends on your shell. You can find out the name of your shell with the
 following command:
 
-  echo $SHELL | awk -F "/" '{print $NF}'
+      echo $SHELL | awk -F "/" '{print $NF}'
 
 The most common shells include `bash`, `sh`, and `zsh`. If you do not have one of these shells, you should do some googling to find out where your shell profile is located/
 The `sh` shell is unsupported. If you have this as your main shell, either something is very wrong with your system or you know enough to figure out what I'm doing in the script
