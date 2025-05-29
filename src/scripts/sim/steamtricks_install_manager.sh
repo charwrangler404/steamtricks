@@ -1,6 +1,6 @@
-# STEAMPREFIX is simply the path to where your steam games are installed. My library is in /var/games, but you may change it to your liking
-export STEAMPREFIX="/var/games/SteamLibrary/steamapps/common"
+#!/usr/bin/env bash
 
+# STEAMPREFIX is simply the path to where your steam games are installed. My library is in /var/games, but you may change it to your liking
 # This function will change symbolic links from your steamapps/common folder to the install location of whichever game you wish. I use this
 # for managing stable and beta versions of Project Zomboid, but you can use them for any game
   
