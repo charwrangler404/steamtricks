@@ -1,10 +1,18 @@
 #!/usr/bin/env bash
+
+unsupported_shell () {
+	echo "Your shell $SHELL is not supported by this install script"
+	echo "You will need to manually install by extracting a tarball from"
+	echo "https://github.com/charwrangler404/steamtricks/releases to your home folder"
+	echo "and setting the STEAMTRICKS_PREFIX environment variable in your shell's profile"
+}
+
 install () {
 	mkdir ~/.steamtricks
-	cp src/* ~/.steamtricks
+	cp -r src/* ~/.steamtricks
 	export SHELLPROFILE="~/.${1}rc"
 	echo "export STEAMTRICKS_PREFIX=\"~/.steamtricks\"">>"${SHELLPROFILE}"
-	echo "source ~/.steamtricks/steamtricks.conf">>"${SHELLPROFILE}"
+	echo "export PATH=\"$PATH:$HOME/.steamtricks/bin\""
 	source "${SHELLPROFILE}"
 	edit_prefix
 
@@ -12,15 +20,12 @@ install () {
 
 install_manager () {
 	case "$1" in
-		sh | fish) echo "Shell ${SHELL} not supported"; exit 1
-			;;
 		bash | zsh | yash) install
 			;;
-		*) echo "You will need to install this by manually adding it to either your /etc/profile for system-wide installation or to your shell's profile"
+		*) unsupported_shell
 			;;
 	esac
 }
-
 
 
 read -r -p "Would you like to install the multiple-install game manager? [y/N]" ANS

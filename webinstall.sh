@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 install_steamtricks () {
-	curl | tar -xvC ~/.steamtricks
+	curl | tar -xvC ~/.steamtricks/
 
 }
 
