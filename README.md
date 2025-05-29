@@ -1,4 +1,4 @@
-1# steamtricks
+# steamtricks
 This is a repository of my Steam hacks to allow things such as multiple installs of the same game
 
 ## Determining how you've installed Steam
@@ -53,9 +53,20 @@ The `sh` shell is unsupported. If you have this as your main shell, either somet
 and can engineer your own solution. `bash` and `zsh` shell profiles are located in `~/.bashrc` and `~/.zshrc`, respectively. As they are "dotfiles" they are hidden from commands and the file
 viewer by default, so if you want to list them in the shell or your file browser, you will need to either use `ls -la` or find out how to show hidden files in your graphical file browser.
 
+## multiple_install_manager.sh
+
 This is the script that will be added to your profile in your shell, allowing you access to the following commands
 
     setup_install
     change_install
 
-The `setup_install` command essentially renames an existing install 
+The `setup_install` command essentially renames an existing install in your STEAMPREFIX path.
+
+the `change_install` command creates symbolic links to that new install location at the location where Steam expects that game to be installed. Please note the prompts in this command,
+you will need to heed the prompts if you don't want to be reinstalling your games all the time. I use this for Project Zomboid, which is a fairly small game, but if you are using this
+for a game much larger than that, it will get annoying to accidentally update your game to a version you do not want it to be. In order to maintain the different versions of the game
+as different versions, there are some clicks you will have to make in Steam itself to prevent it from updating the game to a version you do not want that install to be at. Some of these
+clicks will be needed to be made EVERY TIME you run the change_install script.
+
+Most notably, you will want to ensure that your update settings for the game are set up so that steam does not update the game automatically. If you change them to "Only update on launch"
+it will not mean reinstalling the game to ensure you keep the versions that you want separate separate when you launch Steam.
