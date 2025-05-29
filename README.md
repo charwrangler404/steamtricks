@@ -12,6 +12,8 @@ If you get any output that does not look similar to the above, you have Steam in
 
 ## Installation
 
+Either git clone this repository and install using the install script, or run the following command in your shell:
+
 
 
 ## Notes on setup with a flatpak Steam
