@@ -4,7 +4,7 @@ install_manager () {
   case "$1" in
     sh) echo "Shell not supported"; exit 1
     ;;
-    bash | zsh) curl https://github.com/charwrangler404/steamtricks/blob/f9d6e2d8db2a0577520118945701c9511ed0b8c3/multiple_install_manager.sh >> "${HOME}/.${1}rc"
+    bash | zsh) cat multiple_install_manager.sh >> "${HOME}/.${1}rc"
     ;;
     *) echo "You will need to install this by manually adding it to either your /etc/profile for system-wide installation or to your shell's profile"
     ;;
