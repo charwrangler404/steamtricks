@@ -1,4 +1,4 @@
-# steamtricks
+1# steamtricks
 This is a repository of my Steam hacks to allow things such as multiple installs of the same game
 
 ## Determining how you've installed Steam
@@ -48,7 +48,7 @@ following command:
 
       echo $SHELL | awk -F "/" '{print $NF}'
 
-The most common shells include `bash`, `sh`, and `zsh`. If you do not have one of these shells, you should do some googling to find out where your shell profile is located/
+The most common shells include `bash`, `sh`, and `zsh`. If you do not have one of these shells, you should do some googling to find out where your shell profile is located.
 The `sh` shell is unsupported. If you have this as your main shell, either something is very wrong with your system or you know enough to figure out what I'm doing in the script
 and can engineer your own solution. `bash` and `zsh` shell profiles are located in `~/.bashrc` and `~/.zshrc`, respectively. As they are "dotfiles" they are hidden from commands and the file
 viewer by default, so if you want to list them in the shell or your file browser, you will need to either use `ls -la` or find out how to show hidden files in your graphical file browser.
