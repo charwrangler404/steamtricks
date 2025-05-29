@@ -9,7 +9,7 @@ install_manager () {
     *) echo "You will need to install this by manually adding it to either your /etc/profile for system-wide installation or to your shell's profile"
     ;;
   esac
-)
+}
 
 echo "Would you like to install the multiple-install game manager?"
 echo -n "[y/N]: "
