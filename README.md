@@ -5,8 +5,8 @@ This is a repository of my Steam hacks to allow things such as multiple installs
 
 The easiest way to find out if you've installed Steam as a flatpak or from your package manager is to run the following command:
 
-  $ flatpak list | grep Steam
-  Steam	com.valvesoftware.Steam	1.0.0.81	stable	system
+    $ flatpak list | grep Steam
+    Steam	com.valvesoftware.Steam	1.0.0.81	stable	system
 
 If you get any output that does not look similar to the above, you have Steam installed through your package manager and can skip the next section.
 
@@ -14,7 +14,7 @@ If you get any output that does not look similar to the above, you have Steam in
 
 Either git clone this repository and install using the install script, or run the following command in your shell:
 
-  curl https://raw.githubusercontent.com/charwrangler404/steamtricks/refs/heads/main/webinstall.sh | bash
+    curl https://raw.githubusercontent.com/charwrangler404/steamtricks/refs/heads/main/webinstall.sh | bash
 
 ## Notes on setup with a flatpak Steam
 
@@ -55,7 +55,7 @@ viewer by default, so if you want to list them in the shell or your file browser
 
 This is the script that will be added to your profile in your shell, allowing you access to the following commands
 
-  setup_install
-  change_install
+    setup_install
+    change_install
 
 The `setup_install` command essentially renames an existing install 
