@@ -1,0 +1,11 @@
+# For the time being, this config file is very picky. You cannot leave trailing
+# slashes on any paths in this folder
+STEAM_PREFIX=~/.var/app/com.valvesoftware.Steam/data/Steam/steamapps/common
+
+# You may add any number of managed games you'd like, just note that the value
+# is case sensitive and should match the original folder name in steamapps/common
+# you must also have a separate MANAGED_GAME[] entry for each game
+# the brackets are necessary
+MANAGED_GAME[]=ProjectZomboid
+MANAGED_GAME[]=ELDEN RING
+MANAGED_GAME[]=Baldurs Gate 3

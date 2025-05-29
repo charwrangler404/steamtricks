@@ -18,6 +18,7 @@ use constant {
 
 my $steamtricks_prefix = $ENV{'STEAMTRICKS_PREFIX'};
 my $change_install = '';
+my $create_install = '';
 my $new_config = '';
 my $game = '';
 my $game_version = '';
@@ -27,7 +28,9 @@ my $version = '';
 my $config_location = "${steamtricks_prefix}/steamtricks.conf"
 
 GetOptions ('steam-prefix=s' => \$steam_prefix, 
+    'create-install' => \$create_install,
     'change-install' => \$change_install,
+    'game=s' => \$game,
     'setup-config' => \$new_config,
     'steam-prefix=s' => \$new_steam_prefix,
     'game-version=s' => \$game_version,
@@ -45,6 +48,10 @@ sub main {
         print basename($0), VERSION;
     } else if ($new_config) {
         setup_config($new_steam_prefix)
+    } else if ($change_install && $game_version) {
+        
+    } else if ($create_install && $game_version) {
+
     }
 
 }
