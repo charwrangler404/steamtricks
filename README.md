@@ -14,7 +14,7 @@ If you get any output that does not look similar to the above, you have Steam in
 
 Either git clone this repository and install using the install script, or run the following command in your shell:
 
-    curl https://raw.githubusercontent.com/charwrangler404/steamtricks/refs/heads/main/webinstall.sh | bash
+    curl https://raw.githubusercontent.com/charwrangler404/steamtricks/refs/heads/main/webinstall.sh | $SHELL
 
 ## Notes on setup with a flatpak Steam
 
