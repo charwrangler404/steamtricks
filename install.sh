@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 unsupported_shell () {
 	echo "Your shell $SHELL is not supported by this install script"

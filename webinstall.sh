@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 export DOWNLOADURL=""
 
@@ -19,11 +19,10 @@ install () {
 		echo "export STEAMTRICKS_PREFIX=\"$HOME/.steamtricks\"">>"${SHELLPROFILE}"
 	fi
 
-	if [ -z "$(echo $PATH | grep 'steamtricks')" ]; then
-		echo "Install completed! Please source your profile $SHELLPROFILE to load the changes!"
-	fi
-
-	echo "Install completed! Please source your profile $SHELLPROFILE to load the changes!"
+  if [ -z "$(echo $PATH | grep 'steamtricks')" ]; then
+    echo 'export PATH="$PATH:~/.steamtricks/bin"'>>${SHELLPROFILE}
+  fi
+  echo "Install completed! Please source your profile $SHELLPROFILE to load the changes!"
 }
 
 install_manager () {
