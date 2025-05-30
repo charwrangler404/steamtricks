@@ -12,10 +12,16 @@ unsupported_shell () {
 
 install () {
 	export SHELLPROFILE="$1"
-  curl "$DOWNLOADURL" | tar -xvC $HOME/
+  curl "$DOWNLOADURL" | tar -xvC $HOME/ || echo "Could not install steamtricks" && exit 1
 	chmod 755 $HOME/.steamtricks/bin/steamtricks
-	echo "export STEAMTRICKS_PREFIX=\"$HOME/.steamtricks\"">>"${SHELLPROFILE}"
-	echo "export PATH=\"\$PATH:$HOME/.steamtricks/bin\"">>"${SHELLPROFILE}"
+
+  if [ -z "$STEAMTRICKS_PREFIX" ]; then
+		echo "export STEAMTRICKS_PREFIX=\"$HOME/.steamtricks\"">>"${SHELLPROFILE}"
+	fi
+
+	if [ -z "$(echo $PATH | grep 'steamtricks')" ]; then
+		echo "Install completed! Please source your profile $SHELLPROFILE to load the changes!"
+	fi
 
 	echo "Install completed! Please source your profile $SHELLPROFILE to load the changes!"
 }

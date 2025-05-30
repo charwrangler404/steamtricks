@@ -10,13 +10,19 @@ unsupported_shell () {
 
 install () {
 	export SHELLPROFILE="$1"
-	mkdir $HOME/.steamtricks
-	cp -r steamtricks/* $HOME/.steamtricks
+	if [ -d "$HOME/.steamtricks" ]; then
+	else
+		mkdir $HOME/.steamtricks
+	fi
+	cp -r steamtricks/* $HOME/.steamtricks/
 	chmod 755 $HOME/.steamtricks/bin/steamtricks
-	echo "export STEAMTRICKS_PREFIX=\"$HOME/.steamtricks\"">>"${SHELLPROFILE}"
-	echo "export PATH=\"\$PATH:$HOME/.steamtricks/bin\"">>"${SHELLPROFILE}"
+	if [ -z "$STEAMTRICKS_PREFIX" ]; then
+		echo "export STEAMTRICKS_PREFIX=\"$HOME/.steamtricks\"">>"${SHELLPROFILE}"
+	fi
 
-	echo "Install completed! Please source your profile $SHELLPROFILE to load the changes!"
+	if [ -z "$(echo $PATH | grep 'steamtricks')" ]; then
+		echo "Install completed! Please source your profile $SHELLPROFILE to load the changes!"
+	fi
 }
 
 install_manager () {
