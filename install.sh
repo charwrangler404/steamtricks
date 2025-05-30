@@ -10,8 +10,7 @@ unsupported_shell () {
 
 install () {
 	export SHELLPROFILE="$1"
-	if [ -d "$HOME/.steamtricks" ]; then
-	else
+	if [ ! -d "$HOME/.steamtricks" ]; then
 		mkdir $HOME/.steamtricks
 	fi
 	cp -r steamtricks/* $HOME/.steamtricks/
@@ -21,8 +20,10 @@ install () {
 	fi
 
 	if [ -z "$(echo $PATH | grep 'steamtricks')" ]; then
-		echo "Install completed! Please source your profile $SHELLPROFILE to load the changes!"
+		echo 'export PATH="$PATH:~/.steamtricks/bin"'>>${SHELLPROFILE}
 	fi
+	
+	echo "Install completed! Please source your profile $SHELLPROFILE to load the changes!"
 }
 
 install_manager () {
