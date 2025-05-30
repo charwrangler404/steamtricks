@@ -1,5 +1,6 @@
 # For the time being, this config file is very picky. You cannot leave trailing
 # slashes on any paths in this folder
+[general]
 steam_prefix=~/.var/app/com.valvesoftware.Steam/data/Steam/steamapps/common
 # You may add any number of managed games you'd like, just note that the value
 # is case sensitive and should match the original folder name in steamapps/common

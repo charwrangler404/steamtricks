@@ -1,72 +1,50 @@
 # steamtricks
 This is a repository of my Steam hacks to allow things such as multiple installs of the same game
 
-## Determining how you've installed Steam
-
-The easiest way to find out if you've installed Steam as a flatpak or from your package manager is to run the following command:
-
-    $ flatpak list | grep Steam
-    Steam	com.valvesoftware.Steam	1.0.0.81	stable	system
-
-If you get any output that does not look similar to the above, or no output, you have Steam installed through your package manager and can skip the next section.
-
 ## Installation
 
-Either `git clone` this repository and install using the install script, or run the following command in your shell:
+There are two methods of installing this project. The first requires git:
 
-    curl https://raw.githubusercontent.com/charwrangler404/steamtricks/refs/heads/main/webinstall.sh | $SHELL
+    git clone  https://github.com/charwrangler404/steamtricks.git && cd steamtricks && git checkout latest
+    ./install.sh
 
-## Notes on setup with a flatpak Steam
+And the single-command method requires curl:
 
-NOTE: IF YOU DO NOT KNOW WHERE YOUR STEAM GAMES ARE INSTALLED, FIND THIS OUT FIRST
+    curl https://raw.githubusercontent.com/charwrangler404/steamtricks/refs/heads/main/webinstall.sh | sh
 
-You will need to know where your steam games live on your system for any of this to work.
+## steamtricks.conf
 
-If you're using a flatpak (the recommended method) you will need to ensure your games are installed OUTSIDE of the flatpak container.
-This can be done by installing the flatseal flatpak and modifying the permissions of your flatpak to allow it to access files outside of the container.
+The steamtricks.conf file has some specific requirements. If you have not created a steamtricks.conf file when you run steamtricks for the first time, the 
+main script will create one for you with sane defaults. The default assumption when creating the steamtricks.conf file is that you are running a flatpak 
+version of Steam with all your games installed inside the container. If this is not the case, you will need to change the `steam_prefix` variable in the
+`[general]` section of the config file to match the absolute path of your `steamapps/common` directory.
 
-ALLOWING STEAM TO ACCESS ANY FOLDER UNDER `/home` WILL BREAK YOUR STEAM INSTALL AND THAT PERMISSION WILL NEED TO BE REMOVED TO START STEAM
+### `[general]` Section header
 
-The default that I use is to put my Steam library under `/var/games`. If you do not know what you are doing, this is probably the best option.
-Whatever you do, make sure that your install has enough space in `/var` to install all the games you wish to play. You can use the `df -h` command to
-let you know how much space you have free on your system, and where it is.  Some Linux install defaults include VERY SMALL `/var` partitions
-and filling it up with files as you try to install games is a sure-fire way to CRASH YOUR SYSTEM. I mount a 4TB ssd to /var/games in my setup to prevent this.
+The `[general]` section header currently has one required variable, `steam_prefix`. This variable tells steamtricks where to look for your steam games.
+The default value is listed below. If this is not where your Steam games are installed, you will need to change this variable in order for steamtricks to
+work correctly.
 
-If you do not know how to set this up, I recommend you read about `/etc/fstab` for automouting it on boot. If it's encrypted (not recommended for a games-only
-drive) you will also need to read about `/etc/crypttab`. Setting up encrypted game installs is outside of the scope of this article.
+    steam_prefix=/home/<username>/.var/app/com.valvesoftware.Steam/data/Steam/steamapps/common
 
-If you're willing to mess around a bit until I get some proper variable management set up, you can install your games somewhere else. Other good options
-include somewhere under `/opt`. That's probably about it as far as good places to put your games. If you want to know more about which files you will need
-to edit to change the path to something other than `/var/games`, read the below section as well.
+The `steamtricks` executable will evaluate the $HOME environment variable when creating the config file. Due to limitations of the path evaluation of the script,
+shortcuts (such as ~) will not function as expected and will cause steamtricks to be unable to find your steam files.
 
+### `[install_manager]` Section Header
 
-## Notes on setup with a system package Steam
+The `[install_manager]` section header has one required variable, `managed_games[]` which may be added as many times as necessary and may be empty. It is 
+required to have at minimum one instance of this variable that may be blank. The `managed_games[]` variable is managed by the config generation section of the
+steamtricks script and does not require any manual intervention. It keeps track of managed installs of games to support future features that are on the roadmap
+but has no use at this time. You should not set the variable directly, rather let it be auto-populated by prompts in the script.
 
-If you installed Steam with a system pacakage manager (apt, yum, dnf, etc) and NOT flatpak, you can ignore the above section, but will need to edit the STEAMPREFIX
-variable in your shell profile after install. As far as to where this variable is located, it depends on your shell. You can find out the name of your shell with the
-following command:
+## Roadmap
 
-      echo $SHELL | awk -F "/" '{print $NF}'
+- [ ] Add a version selection dialog
+- [ ] Add a game selection dialog
+- [ ] Add prompts to tell user when to restart Steam and any other actions required of them to maintain the installs
+- [ ] Transition to Perl implementation
 
-The most common shells include `bash`, `sh`, and `zsh`. If you do not have one of these shells, you should do some googling to find out where your shell profile is located.
-The `sh` shell is unsupported. If you have this as your main shell, either something is very wrong with your system or you know enough to figure out what I'm doing in the script
-and can engineer your own solution. `bash` and `zsh` shell profiles are located in `~/.bashrc` and `~/.zshrc`, respectively. As they are "dotfiles" they are hidden from commands and the file
-viewer by default, so if you want to list them in the shell or your file browser, you will need to either use `ls -la` or find out how to show hidden files in your graphical file browser.
+## Miscellaneous Resources
 
-## multiple_install_manager.sh
-
-This is the script that will be added to your profile in your shell, allowing you access to the following commands
-
-    setup_install
-    change_install
-
-The `setup_install` command essentially renames an existing install in your STEAMPREFIX path.
-
-the `change_install` command creates symbolic links to that new install location at the location where Steam expects that game to be installed. Please note the prompts in this command,
-you will need to heed the prompts if you don't want to be reinstalling your games all the time. I use this for Project Zomboid, which is a fairly small game, but if you are using this
-for a game much larger than that, it will get annoying to accidentally update your game to a version you do not want it to be. In order to maintain the different versions of the game
-as different versions, there are some clicks you will have to make in Steam itself to prevent it from updating the game to a version you do not want that install to be at. Some of these
-clicks will be needed to be made EVERY TIME you run the change_install script.
-
-Most notably, you will want to ensure that your update settings for the game are set up so that steam does not update the game automatically. If you change them to "Only update on launch"
-it will not mean reinstalling the game to ensure you keep the versions that you want separate separate when you launch Steam.
+If you wish to see what other resources I've bookmarked as good reading for those who game with Steam on linux, here's a page of [resources](resources.md) that 
+you may consult for further reading.
