@@ -12,6 +12,7 @@ install () {
 	export SHELLPROFILE="$1"
 	mkdir $HOME/.steamtricks
 	cp -r steamtricks/* $HOME/.steamtricks
+	chmod 755 $HOME/.steamtricks/bin/steamtricks
 	echo "export STEAMTRICKS_PREFIX=\"$HOME/.steamtricks\"">>"${SHELLPROFILE}"
 	echo "export PATH=\"\$PATH:$HOME/.steamtricks/bin\"">>"${SHELLPROFILE}"
 

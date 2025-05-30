@@ -2,21 +2,33 @@
 
 export DOWNLOADURL=""
 
-install_steamtricks () {
-  export SHELLNAME="$1"
-  export SHELLPROFILE="$HOME/.${SHELLNAME}rc"
-  mkdir -p ~/.steamtricks && curl "$DOWNLOADURL" | tar -xvC ~/.steamtricks/ || echo "Could not install steamtricks"
-  echo "export STEAMTRICKS_PREFIX=\"$HOME/.steamtricks\"">>$SHELLPROFILE
-  echo 'export PATH="$PATH:$HOME/.winetricks/bin"'>>$SHELLPROFILE
-  echo "Installation complete! Please source your profile to apply changes"
+unsupported_shell () {
+	echo "Your shell $SHELL is not supported by this install script"
+	echo "You will need to manually install by extracting a tarball from"
+	echo "https://github.com/charwrangler404/steamtricks/releases to your home folder"
+	echo "and setting the STEAMTRICKS_PREFIX to your shell's environment, as well as"
+	echo "$HOME/.steamtricks/bin to your PATH"
 }
 
-install_steamtricks_sh () {
-  export $SHELLPROFILE="$HOME/.profile"
-  mkdir -p $HOME/.steamtricks && curl "$DOWNLOADURL" | tar -xvC $HOME/.steamtricks/ || echo "Could not install steamtricks"
-  echo "export STEAMTRICKS_PREFIX=\"$HOME/.steamtricks\"">>$SHELLPROFILE
-  echo 'export PATH="$PATH:$HOME/.winetricks/bin"'>>$SHELLPROFILE
-  echo "Installation complete! Please source your profile to apply changes"
+install () {
+	export SHELLPROFILE="$1"
+  curl "$DOWNLOADURL" | tar -xvC $HOME/
+	chmod 755 $HOME/.steamtricks/bin/steamtricks
+	echo "export STEAMTRICKS_PREFIX=\"$HOME/.steamtricks\"">>"${SHELLPROFILE}"
+	echo "export PATH=\"\$PATH:$HOME/.steamtricks/bin\"">>"${SHELLPROFILE}"
+
+	echo "Install completed! Please source your profile $SHELLPROFILE to load the changes!"
+}
+
+install_manager () {
+	case "$1" in
+		bash | zsh | yash) install "$HOME/.${1}rc"
+			;;
+		sh ) install "$HOME/.profile"
+			;;
+		*) unsupported_shell
+			;;
+	esac
 }
 
 if [ "$EUID" -eq 0 ]; then
@@ -25,11 +37,5 @@ if [ "$EUID" -eq 0 ]; then
 fi
 
 SHELLNAME=$(echo $SHELL | awk -F '/' '{print $NF}')
-case "$SHELLNAME" in
-  sh) install_steamtricks_sh
-  ;;
-  bash | zsh | yash) install_steamtricks "$SHELLNAME"
-  ;;
-  *) echo "You will need to install this by manually adding it to either your /etc/profile for system-wide installation or to your shell's profile"
-  ;;
-esac
+
+install_manager $SHELLNAME
