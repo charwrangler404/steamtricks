@@ -9,10 +9,10 @@ unsupported_shell () {
 }
 
 install () {
-	export $SHELLPROFILE="$1"
+	export SHELLPROFILE="$1"
 	mkdir $HOME/.steamtricks
 	cp -r steamtricks/* $HOME/.steamtricks
-	echo "export STEAMTRICKS_PREFIX=\"~/.steamtricks\"">>"${SHELLPROFILE}"
+	echo "export STEAMTRICKS_PREFIX=\"$HOME/.steamtricks\"">>"${SHELLPROFILE}"
 	echo "export PATH=\"\$PATH:$HOME/.steamtricks/bin\"">>"${SHELLPROFILE}"
 
 	echo "Install completed! Please source your profile $SHELLPROFILE to load the changes!"

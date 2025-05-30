@@ -1,5 +1,4 @@
-#!/usr/bin/env per
-l
+#!/usr/bin/env perl
 
 use strict;
 use warnings;
@@ -24,21 +23,26 @@ use constant {
 };
 
 my $steamtricks_prefix = $ENV{'STEAMTRICKS_PREFIX'};
+my $home = $ENV{'HOME'};
+
+if ( ! $steamtricks_prefix ) {
+    die "Error! Please set your STEAMTRICKS_PREFIX environment variable.";
+}
+
+if (! $home ) {
+    die "Error! HOME environment variable not set, don't know where to look!"
+}
+
+my $config_location = "${steamtricks_prefix}/steamtricks.conf";
 my $change_install = '';
 my $create_install = '';
 my $new_config = '';
 my $game = '';
 my $game_version = '';
-my $home = $ENV{'HOME'};
 my $new_steam_prefix = "${home}/.var/app/com.valvesoftware.Steam/data/Steam/steamapps/common";
 my $help = '';
 my $version = '';
 my $print_version = '';
-
-if ( ! $steamtricks_prefix ) {
-    die "Please set your STEAMTRICKS_PREFIX environment variable";
-}
-my $config_location = "${steamtricks_prefix}/steamtricks.conf";
 
 GetOptions (
     'create-managed-install' => \$create_install,
@@ -101,7 +105,7 @@ sub setup_config {
         if ( $ans =~ /^[yY].?$/ ) {
             $Config = create_config;
         } else { 
-            die "Config not created"; 
+            die "Error! Config not created."; 
         }
 
     } else {
@@ -115,7 +119,7 @@ sub create_config {
         general => { "steam_prefix" => $new_steam_prefix },
         install_manager => { "managed_games[]" => ""}
     });
-    $Config->write( ${config_location} ) or die "Config file $config_location could not be written: $!";
+    $Config->write( ${config_location} ) or die "Error! Config file $config_location could not be written: $!";
     return $Config;
 }
 
@@ -127,7 +131,7 @@ sub update_config {
     } else {
         $Config->{_}->{$key} = $value;
     }
-    $Config->write($config_location) or die "Config file $config_location could not be written: $!";
+    $Config->write($config_location) or die "Error! Config file $config_location could not be written: $!";
 }
 
 sub create_install {
@@ -147,13 +151,13 @@ sub create_install {
             my $ans = <STDIN>;
             chomp $ans;
             if ($ans =~ /^[nN].?$/ ) {
-                die "Config not upddated, exiting"; 
+                die "Config not upddated."; 
             } else { 
                 update_config("install_manager", "managed_games[]", $game);
             }
         }
     } else {
-        die "Game not found at ${steam_prefix}/${game} please check your steam_prefix and your game name";
+        die "Error! Game not found at ${steam_prefix}/${game} please check your steam_prefix and your game name.";
     }
 }
 
@@ -174,7 +178,7 @@ sub change_install {
         or die "Could not create symlink ${steam_prefix}/${game}: $!";
         print "You may now change any beta settings and restart Steam to apply your changes\n";
     } else {
-        die "${steam_prefix}/${game} is not a symlink, please run with --create-managed-install";
+        die "Error! ${steam_prefix}/${game} is not a symlink, please run with --create-managed-install";
     }
 }
 
