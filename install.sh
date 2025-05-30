@@ -4,7 +4,8 @@ unsupported_shell () {
 	echo "Your shell $SHELL is not supported by this install script"
 	echo "You will need to manually install by extracting a tarball from"
 	echo "https://github.com/charwrangler404/steamtricks/releases to your home folder"
-	echo "and setting the STEAMTRICKS_PREFIX environment variable in your shell's profile"
+	echo "and setting the STEAMTRICKS_PREFIX to your shell's environment, as well as"
+	echo "$HOME/.steamtricks/bin to your PATH"
 }
 
 install () {
@@ -14,7 +15,6 @@ install () {
 	echo "export STEAMTRICKS_PREFIX=\"~/.steamtricks\"">>"${SHELLPROFILE}"
 	echo "export PATH=\"\$PATH:$HOME/.steamtricks/bin\"">>${SHELLPROFILE}
 	source "${SHELLPROFILE}"
-	edit_prefix
 }
 
 install_manager () {
