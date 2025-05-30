@@ -1,0 +1,139 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+use Getopt::Long;
+use Config::Tiny;
+use File::Basename;
+use Data::Dumper;
+use File::Copy;
+
+sub print_help;
+sub main;
+sub parse_config;
+sub setup_config;
+sub write_config;
+sub create_install;
+sub change_install;
+
+use constant {
+    VERSION = "v0.1.0"
+}
+
+my $steamtricks_prefix = $ENV{'STEAMTRICKS_PREFIX'};
+my $change_install = '';
+my $create_install = '';
+my $new_config = '';
+my $game = '';
+my $game_version = '';
+my $new_steam_prefix = '~/.var/app/com.valvesoftware.Steam/data/Steam/steamapps/common';
+my $help = '';
+my $version = '';
+my $config_location = "${steamtricks_prefix}/steamtricks.conf"
+
+GetOptions ('steam-prefix=s' => \$steam_prefix, 
+    'create-install' => \$create_install,
+    'change-install' => \$change_install,
+    'game=s' => \$game,
+    'game-version=s' => \$game_version,
+    'setup-config' => \$new_config,
+    'steam-prefix=s' => \$new_steam_prefix,
+    'help' => \$help,
+    'version' => \$print_version);
+
+main;
+
+sub main {
+
+    if ($help) {
+        print_help;
+        return 0;
+    } else if ($version) {
+        print basename($0), VERSION;
+        return 0;
+    } else if ($new_config) {
+        setup_config($new_steam_prefix)
+        return 0;
+    } else {
+            my $steam_prefix, @managed_games = parse_config;
+
+            if ($change_install && $game_version && ! $create_install) {
+                change_install($steam_prefix, @managed_games);
+                return 0;
+            } else if ($create_install && $game_version && ! $change_install ) {
+                create_install($steam_prefix, @managed_games);
+                return 0;
+            }
+    }
+}
+
+sub parse_config {
+
+    if (-s "$config_location" ) {
+        my $Config = Config::Tiny->read( "$config_location" );
+    } else {
+        warn "config file ${config_location} not found. Creating new config with flatpak defaults\n";
+        my $Config = setup_config;
+    }
+
+    my $steam_prefix = Dumper($Config->{steam_prefix});
+    my @managed_games = Dumper($Config->{install_manager}->{managed_games})
+    return $steam_prefix, @managed_games;
+}
+
+sub setup_config {
+
+    print "Creating config with STEAM_PREFIX=${new_steam_prefix}\n"
+    if (-s "${config_location}") {
+        warn "$config_location already exists, do you wish to overwrite this file? [y/N]";
+        my $ans = <STDIN>;
+        chomp $ans;
+
+        switch($ans) {
+            case /[yY].?/ { my $Config = write_config }
+            else { die "Config not created. Exiting" }
+        }
+
+    } else {
+        my $Config = write_config;
+    }
+    return $Config;
+}
+
+sub write_config {
+    my $Config = Config::Tiny->new({
+        _ => { STEAM_PREFIX => $new_steam_prefix }
+        install_manager => { MANAGED_GAMES[] => ""}
+    });
+    $Config->write( ${config_location} ) or die "Config file $config_location could not be written: $!\n";
+    return $Config;
+}
+
+sub create_install {
+    my $steam_prefix, @managed_games = @_;
+
+    if (-d "${steam_prefix}/${game}") {
+       move("${steam_prefix}/${game}", "${steam_prefix}/${game}_${game_version}");
+       symlink("${steam_prefix}/${game}_${game_version}", "${steam_prefix}/${game}");
+    } else if ( -l "${steam_prefix}/${game}") {
+        if ( grep( /^$game$/, @managed_games) ){
+            warn "This game is already managed, are you looking for --change-install ?";
+            exit 1;
+        } else {
+
+        }
+
+
+    } else {
+        die "Game not found at ${steam_prefix}/${game} please check your steam prefix and your game name";
+    }
+}
+
+sub change_install {
+    
+}
+
+sub print_help {
+    print basename($0), "\n";
+}
