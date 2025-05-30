@@ -9,18 +9,17 @@ unsupported_shell () {
 
 install () {
 	mkdir ~/.steamtricks
-	cp -r src/* ~/.steamtricks
+	cp -r steamtricks/* ~/.steamtricks
 	export SHELLPROFILE="~/.${1}rc"
 	echo "export STEAMTRICKS_PREFIX=\"~/.steamtricks\"">>"${SHELLPROFILE}"
-	echo "export PATH=\"$PATH:$HOME/.steamtricks/bin\""
+	echo "export PATH=\"\$PATH:$HOME/.steamtricks/bin\"">>${SHELLPROFILE}
 	source "${SHELLPROFILE}"
 	edit_prefix
-
 }
 
 install_manager () {
 	case "$1" in
-		bash | zsh | yash) install
+		bash | zsh | yash) install $1
 			;;
 		*) unsupported_shell
 			;;
