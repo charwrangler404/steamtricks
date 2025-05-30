@@ -9,17 +9,20 @@ unsupported_shell () {
 }
 
 install () {
-	mkdir ~/.steamtricks
-	cp -r steamtricks/* ~/.steamtricks
-	export SHELLPROFILE="$HOME/.${1}rc"
+	export $SHELLPROFILE="$1"
+	mkdir $HOME/.steamtricks
+	cp -r steamtricks/* $HOME/.steamtricks
 	echo "export STEAMTRICKS_PREFIX=\"~/.steamtricks\"">>"${SHELLPROFILE}"
-	echo "export PATH=\"\$PATH:$HOME/.steamtricks/bin\"">>${SHELLPROFILE}
-	source "${SHELLPROFILE}"
+	echo "export PATH=\"\$PATH:$HOME/.steamtricks/bin\"">>"${SHELLPROFILE}"
+
+	echo "Install completed! Please source your profile $SHELLPROFILE to load the changes!"
 }
 
 install_manager () {
 	case "$1" in
-		bash | zsh | yash) install $1
+		bash | zsh | yash) install "$HOME/.${1}rc"
+			;;
+		sh ) install "$HOME/.profile"
 			;;
 		*) unsupported_shell
 			;;
@@ -32,6 +35,7 @@ if [ "$EUID" -eq 0 ]; then
 fi
 
 read -r -p "Would you like to install the multiple-install game manager? [y/N]" ANS
+
 case "$ANS" in
 	[yY]* ) install_manager "$(echo $SHELL | awk -F "/" '{print $NF}')"
 	;;
