@@ -156,14 +156,16 @@ sub change_install {
 
     if ( -l "${steam_prefix}/${game}" && grep /^$game$/, $managed_games) {
         unlink "${steam_prefix}/${game}" or die "Could not unlink $steam_prefix/$game: $!";
-        symlink "${steam_prefix}/${$game}_${game_version}", "${steam_prefix}/${game}" or die "Could not create symlink ${steam_prefix}/${game}: $!";
+        symlink "${steam_prefix}/${$game}_${game_version}", "${steam_prefix}/${game}" 
+        or die "Could not create symlink ${steam_prefix}/${game}: $!";
         print "You may now change any beta settings and restart Steam to apply your changes\n";
     } elsif ( -l "${steam_prefix}/${game}" && ! grep /^$game$/, $managed_games) {
         warn "$game not in config as a managed_game[], adding to config";
         update_config("install_manager", "managed_games[]", $game);
 
         unlink "${steam_prefix}/${game}" or die "Could not unlink $steam_prefix/$game: $!";
-        symlink "${steam_prefix}/${$game}_${game_version}", "${steam_prefix}/${game}" or die "Could not create symlink ${steam_prefix}/${game}: $!";
+        symlink "${steam_prefix}/${$game}_${game_version}", "${steam_prefix}/${game}" 
+        or die "Could not create symlink ${steam_prefix}/${game}: $!";
         print "You may now change any beta settings and restart Steam to apply your changes\n";
     } else {
         die "${steam_prefix}/${game} is not a symlink, please run with --create-managed-install";

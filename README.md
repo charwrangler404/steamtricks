@@ -8,11 +8,11 @@ The easiest way to find out if you've installed Steam as a flatpak or from your 
     $ flatpak list | grep Steam
     Steam	com.valvesoftware.Steam	1.0.0.81	stable	system
 
-If you get any output that does not look similar to the above, you have Steam installed through your package manager and can skip the next section.
+If you get any output that does not look similar to the above, or no output, you have Steam installed through your package manager and can skip the next section.
 
 ## Installation
 
-Either git clone this repository and install using the install script, or run the following command in your shell:
+Either `git clone` this repository and install using the install script, or run the following command in your shell:
 
     curl https://raw.githubusercontent.com/charwrangler404/steamtricks/refs/heads/main/webinstall.sh | $SHELL
 
